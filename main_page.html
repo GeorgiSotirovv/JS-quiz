@@ -3,30 +3,62 @@
 <head>
   <meta charset="utf-8" />
   <title>JS Quiz — Millionaire</title>
-  
-    <style>
-    body { background:#101522; color:#fff; font-family:sans-serif;
-    min-height:100vh; display:flex; align-items:center; justify-content:center; }
-    .card { background:#1a2240; padding:16px; border-radius:8px; width:90%; max-width:700px; }
-    .option { display:block; margin:8px 0; padding:8px; background:#121a34; border:1px solid #34406a; border-.option.correct { background:#14361f; }
-    .option.wrong { background:#3a1218; }
-    </style>
-  
+  <style>
+    body {
+      margin: 0; 
+      font-family: system-ui, Arial, sans-serif;
+      background: #101522; 
+      color: #f5f7ff;
+      min-height: 100vh; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      padding: 16px;
+    }
+    .card {
+      width: 100%; 
+      max-width: 720px; 
+      background: #1a2240; 
+      border: 1px solid #263057; 
+      border-radius: 12px; 
+      padding: 16px;
+    }
+    #options { margin-top: 12px; display: grid; gap: 8px; }
+    .option {
+         display: block;
+        padding: 10px 12px;
+        border: 1px solid #34406a;
+        background: #121a34;
+        border-radius: 8px;
+        color: #f5f7ff;
+        cursor: pointer;
+        text-align: left;
+}
+  </style>
 </head>
 <body>
-<div class="card">
-  <div class="header">
-    <div class="h1">JS Quiz — "Who Wants to Be a Millionaire"</div>
-    <div class="badge" id="progress">Question 1/20</div>
+  <div class="card">
+    <h1>JS Quiz — "Who Wants to Be a Millionaire"</h1>
+    <div id="question">Loading…</div>
+    <div id="options"></div>
   </div>
-  <div class="question" id="question">Loading...</div>
-  <div class="grid" id="options"></div>
-  <div class="footer">
-    <button class="btn" id="restartBtn">New Game</button>
-  </div>
-</div>
-<script>
-//here will be the logic
+
+  <script>
+
+    const questions = [
+        { q: "Which operator checks strict equality?", opts: ["==","===","=","!="], correct: 1 },
+        { q: "What is typeof null?", opts: ["null","object","undefined","number"], correct: 1 }
+    ];
+
+    const qEl = document.getElementById('question');
+
+    let current = 0; 
+
+    function renderQuestionText() {
+        qEl.textContent = questions[current].q;
+    }
+
+    renderQuestionText();
 </script>
 </body>
 </html>
