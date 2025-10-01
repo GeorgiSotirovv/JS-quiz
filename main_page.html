@@ -4,6 +4,11 @@
   <meta charset="utf-8" />
   <title>JS Quiz — Millionaire</title>
   <style>
+
+      .option.correct { background: #14361f; border-color: #1f6b34; }
+      .option.wrong   { background: #3a1218; border-color: #7a2630; }
+      .option:disabled { opacity: 0.7; cursor: not-allowed; }
+
     body {
       margin: 0; 
       font-family: system-ui, Arial, sans-serif;
@@ -32,8 +37,9 @@
         border-radius: 8px;
         color: #f5f7ff;
         cursor: pointer;
-        text-align: left;
-}
+        text-align: left;        
+      }
+      
   </style>
     </head>
     <body>
@@ -44,24 +50,23 @@
     </div>
 
      <script>
-
+    // Questions
     const questions = [
       { q: "Which operator checks strict equality?", opts: ["==","===","=","!="], correct: 1 },
       { q: "What is typeof null?", opts: ["null","object","undefined","number"], correct: 1 }
     ];
 
-
+    //DOM elements
     const qEl = document.getElementById('question');
-
     const oEl = document.getElementById('options');
 
+    //State
     let current = 0;
 
-
+    //Render
     function renderQuestionText() {
       qEl.textContent = questions[current].q;
     }
-
 
     function renderOptions() {
       const item = questions[current];
@@ -70,10 +75,46 @@
         const btn = document.createElement('button');
         btn.className = 'option';
         btn.innerHTML = `<strong>${label}</strong> ${item.opts[i]}`;
+        btn.onclick = () => handleAnswer(i, btn); 
         oEl.appendChild(btn);
       });
     }
 
+    
+    function handleAnswer(i, btn) {
+      const item = questions[current];
+      const correctIndex = item.correct;
+
+     
+      [...oEl.children].forEach(b => b.disabled = true);
+
+      if (i === correctIndex) {
+        btn.classList.add('correct');
+        setTimeout(() => {
+          current++;
+          if (current < questions.length) {
+            renderQuestionText();
+            renderOptions();
+          } else {
+            alert('Congrats! You finished all questions 🎉');
+            current = 0;
+            renderQuestionText();
+            renderOptions();
+          }
+        }, 600);
+      } else {
+        btn.classList.add('wrong');
+        oEl.children[correctIndex].classList.add('correct');
+        setTimeout(() => {
+          alert('Wrong answer. Starting a new game.');
+          current = 0;
+          renderQuestionText();
+          renderOptions();
+        }, 800);
+      }
+    }
+
+   
     function start() {
       renderQuestionText();
       renderOptions();
