@@ -4,50 +4,64 @@
   <meta charset="utf-8" />
   <title>JS Quiz — Millionaire</title>
   <style>
-
-      .option.correct { background: #14361f; border-color: #1f6b34; }
-      .option.wrong   { background: #3a1218; border-color: #7a2630; }
-      .option:disabled { opacity: 0.7; cursor: not-allowed; }
-
     body {
-      margin: 0; 
+      margin: 0;
       font-family: system-ui, Arial, sans-serif;
-      background: #101522; 
+      background: #101522;
       color: #f5f7ff;
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
       justify-content: center;
       padding: 16px;
     }
     .card {
-      width: 100%; 
-      max-width: 720px; 
-      background: #1a2240; 
-      border: 1px solid #263057; 
-      border-radius: 12px; 
+      width: 100%;
+      max-width: 720px;
+      background: #1a2240;
+      border: 1px solid #263057;
+      border-radius: 12px;
       padding: 16px;
     }
     #options { margin-top: 12px; display: grid; gap: 8px; }
     .option {
-         display: block;
-        padding: 10px 12px;
-        border: 1px solid #34406a;
-        background: #121a34;
-        border-radius: 8px;
-        color: #f5f7ff;
-        cursor: pointer;
-        text-align: left;        
-      }
-      
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid #34406a;
+      background: #121a34;
+      border-radius: 8px;
+      color: #f5f7ff;
+      cursor: pointer;
+      text-align: left;
+    }
+    .option.correct { background: #14361f; border-color: #1f6b34; }
+    .option.wrong   { background: #3a1218; border-color: #7a2630; }
+    .option:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+    }
+    .title { font-size: 18px; font-weight: 700; }
+    .badge { font-size: 12px; padding: 4px 8px; border: 1px solid #34406a; border-radius: 999px; }
+    .btn {
+      margin-top: 10px;
+      border: 1px solid #34406a; background: #222b4a; color: #f5f7ff;
+      border-radius: 8px; padding: 8px 12px; cursor: pointer;
+    }
   </style>
     </head>
     <body>
-  <div class="card">
-    <h1>JS Quiz — "Who Wants to Be a Millionaire"</h1>
+      <div class="card">
+      <div class="header">
+      <div class="title">JS Quiz — "Who Wants to Be a Millionaire"</div>
+      <div id="progress" class="badge">Question 1/2</div>
+    </div>
+
     <div id="question">Loading…</div>
     <div id="options"></div>
-    </div>
+
+    <button id="restartBtn" class="btn">New Game</button>
+  </div>
 
      <script>
     // Questions
@@ -59,12 +73,15 @@
     //DOM elements
     const qEl = document.getElementById('question');
     const oEl = document.getElementById('options');
+    const pEl = document.getElementById('progress'); 
+    const rBtn = document.getElementById('restartBtn');
 
     //State
     let current = 0;
 
     //Render
     function renderQuestionText() {
+      pEl.textContent = `Question ${current + 1}/${questions.length}`;
       qEl.textContent = questions[current].q;
     }
 
@@ -85,8 +102,9 @@
       const item = questions[current];
       const correctIndex = item.correct;
 
-     
+
       [...oEl.children].forEach(b => b.disabled = true);
+
 
       if (i === correctIndex) {
         btn.classList.add('correct');
@@ -114,6 +132,12 @@
       }
     }
 
+    function restart() {
+      current = 0;
+      renderQuestionText();
+      renderOptions();
+    }
+    rBtn.onclick = restart;
    
     function start() {
       renderQuestionText();
