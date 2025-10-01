@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>JS Quiz — Millionaire</title>
+  <title>Quiz — Millionaire</title>
   <style>
     body {
       margin: 0;
@@ -38,9 +38,8 @@
     .option.wrong   { background: #3a1218; border-color: #7a2630; }
     .option:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    .header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
-    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    
     .title { font-size: 18px; font-weight: 700; }
     .badge { font-size: 12px; padding: 4px 8px; border: 1px solid #34406a; border-radius: 999px; }
     .btn {
@@ -48,17 +47,15 @@
       border: 1px solid #34406a; background: #222b4a; color: #f5f7ff;
       border-radius: 8px; padding: 8px 12px; cursor: pointer;
 
-      .lifelines { 
-        margin-top: 10px; 
-        display: flex; 
-        gap: 8px; 
-        flex-wrap: wrap; 
-      }
-
         .btn.used { 
           opacity: .6; 
           pointer-events: none; 
-}
+      }
+
+
+    .lifelines { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn.used { opacity: .6; pointer-events: none; }
     }
   </style>
     </head>
@@ -96,7 +93,8 @@
     const rBtn = document.getElementById('restartBtn');
     const b5050   = document.getElementById('btn5050');
 
-
+    const bFriend = document.getElementById('btnFriend');
+    const bAud = document.getElementById('btnAudience');
 
     //State
     let current = 0;
@@ -154,6 +152,15 @@
       }
     }
 
+    function restart() {
+      current = 0;
+      // reset lifelines state
+      [b5050, bFriend, bAud].forEach(b => b.classList.remove('used'));
+      renderQuestionText();
+      renderOptions();
+    }
+    rBtn.onclick = restart;
+
     // 50-50 
     b5050.onclick = () => {
       if (b5050.classList.contains('used')) return; 
@@ -174,16 +181,33 @@
     };
 
     //Audience
-    bAud.onclick = () => {}
+    bAud.onclick = () => {
+      if (bAud.classList.contains('used')) return;
+      const c = questions[current].correct;
+      const perc = [0,0,0,0];
+      let remaining = 100;
+
+      perc[c] = 40 + Math.floor(Math.random() * 21); // 40..60
+      remaining -= perc[c];
+
+      const others = [0,1,2,3].filter(i => i !== c);
+      for (let i = 0; i < others.length; i++) {
+        const isLast = i === others.length - 1;
+        const val = isLast ? remaining : Math.floor(Math.random() * (remaining + 1));
+        perc[others[i]] = val;
+        remaining -= val;
+    }
+  }
 
     //Phone call
     bFriend.onclick = () => {}
 
-    function restart() {
+    /*function restart() {
       current = 0;
+      [b5050, bFriend, bAud].forEach(b => b.classList.remove('used'));
       renderQuestionText();
       renderOptions();
-    }
+      }*/
     rBtn.onclick = restart;
    
     function start() {
