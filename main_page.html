@@ -47,18 +47,37 @@
       margin-top: 10px;
       border: 1px solid #34406a; background: #222b4a; color: #f5f7ff;
       border-radius: 8px; padding: 8px 12px; cursor: pointer;
+
+      .lifelines { 
+        margin-top: 10px; 
+        display: flex; 
+        gap: 8px; 
+        flex-wrap: wrap; 
+      }
+
+        .btn.used { 
+          opacity: .6; 
+          pointer-events: none; 
+}
     }
   </style>
     </head>
     <body>
       <div class="card">
+        
       <div class="header">
-      <div class="title">JS Quiz — "Who Wants to Be a Millionaire"</div>
+      <div class="title">"Who Wants to Be a Millionaire"</div>
       <div id="progress" class="badge">Question 1/2</div>
     </div>
 
     <div id="question">Loading…</div>
     <div id="options"></div>
+
+    <div class="lifelines">
+      <button id="btn5050" class="btn">50:50</button>
+      <button id="btnFriend" class="btn">Phone a Friend</button>
+      <button id="btnAudience" class="btn">Ask the Audience</button>
+    </div>
 
     <button id="restartBtn" class="btn">New Game</button>
   </div>
@@ -75,6 +94,9 @@
     const oEl = document.getElementById('options');
     const pEl = document.getElementById('progress'); 
     const rBtn = document.getElementById('restartBtn');
+    const b5050   = document.getElementById('btn5050');
+
+
 
     //State
     let current = 0;
@@ -131,6 +153,31 @@
         }, 800);
       }
     }
+
+    // 50-50 
+    b5050.onclick = () => {
+      if (b5050.classList.contains('used')) return; 
+
+      const correctIndex = questions[current].correct;
+      let removed = 0;
+
+  
+    [...oEl.children].forEach((btn, i) => {
+      if (i !== correctIndex && removed < 2) {
+        btn.style.visibility = 'hidden'; // btn.style.display = 'none'
+        removed++;
+      }
+    });
+
+  b5050.classList.add('used');
+  alert('50:50 used — two wrong answers removed.');
+    };
+
+    //Audience
+    bAud.onclick = () => {}
+
+    //Phone call
+    bFriend.onclick = () => {}
 
     function restart() {
       current = 0;
