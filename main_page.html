@@ -196,8 +196,14 @@
         const val = isLast ? remaining : Math.floor(Math.random() * (remaining + 1));
         perc[others[i]] = val;
         remaining -= val;
-    }
-  }
+      }
+
+      alert(
+        `Audience vote:\n` +
+        perc.map((p,i) => `${['A','B','C','D'][i]}: ${p}%`).join('\n')
+      );
+      bAud.classList.add('used');
+    };
 
     //Phone call
     bFriend.onclick = () => {}
