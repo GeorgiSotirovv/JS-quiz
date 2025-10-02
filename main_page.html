@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <title>Quiz — Millionaire</title>
@@ -15,6 +16,7 @@
       justify-content: center;
       padding: 16px;
     }
+
     .card {
       width: 100%;
       max-width: 720px;
@@ -23,7 +25,13 @@
       border-radius: 12px;
       padding: 16px;
     }
-    #options { margin-top: 12px; display: grid; gap: 8px; }
+
+    #options {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
     .option {
       display: block;
       padding: 10px 12px;
@@ -34,35 +42,75 @@
       cursor: pointer;
       text-align: left;
     }
-    .option.correct { background: #14361f; border-color: #1f6b34; }
-    .option.wrong   { background: #3a1218; border-color: #7a2630; }
-    .option:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    
-    .title { font-size: 18px; font-weight: 700; }
-    .badge { font-size: 12px; padding: 4px 8px; border: 1px solid #34406a; border-radius: 999px; }
+    .option.correct {
+      background: #14361f;
+      border-color: #1f6b34;
+    }
+
+    .option.wrong {
+      background: #3a1218;
+      border-color: #7a2630;
+    }
+
+    .option:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid #34406a;
+      border-radius: 999px;
+    }
+
     .btn {
       margin-top: 10px;
-      border: 1px solid #34406a; background: #222b4a; color: #f5f7ff;
-      border-radius: 8px; padding: 8px 12px; cursor: pointer;
+      border: 1px solid #34406a;
+      background: #222b4a;
+      color: #f5f7ff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
 
-        .btn.used { 
-          opacity: .6; 
-          pointer-events: none; 
+      .btn.used {
+        opacity: .6;
+        pointer-events: none;
       }
 
 
-    .lifelines { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+      .lifelines {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
 
-    .btn.used { opacity: .6; pointer-events: none; }
+      .btn.used {
+        opacity: .6;
+        pointer-events: none;
+      }
     }
   </style>
-    </head>
-    <body>
-      <div class="card">
-        
-      <div class="header">
+</head>
+
+<body>
+  <div class="card">
+
+    <div class="header">
       <div class="title">"Who Wants to Be a Millionaire"</div>
       <div id="progress" class="badge">Question 1/2</div>
     </div>
@@ -79,25 +127,36 @@
     <button id="restartBtn" class="btn">New Game</button>
   </div>
 
-     <script>
+  <script>
     // Questions
     const questions = [
-      { q: "Which operator checks strict equality?", opts: ["==","===","=","!="], correct: 1 },
-      { q: "What is typeof null?", opts: ["null","object","undefined","number"], correct: 1 }
+      { q: "Which modern way declares a block-scoped variable that can be reassigned?", opts: ["var", "const", "let", "static"], correct: 2 },
+      { q: "Which operator checks strict equality (value and type)?", opts: ["==", "===", "=", "!=="], correct: 1 },
+      { q: "Which keyword creates a constant value?", opts: ["const", "let", "var", "fixed"], correct: 0 },
+      { q: "Which function shows a popup message?", opts: ["alert()", "print()", "log()", "show()"], correct: 0 },
+      { q: "Which function writes a message to the console?", opts: ["console.log()", "alert()", "write()", "debug()"], correct: 0 },
+      { q: "Which brackets are used for arrays?", opts: ["[]", "()", "{}", "<>"], correct: 0 },
+      { q: "Which brackets are used for objects?", opts: ["{}", "[]", "()", "<>"], correct: 0 },
+      { q: "What is the value of an empty string?", opts: ["''", "null", "undefined", "empty"], correct: 0 },
+      { q: "What keyword stops a loop immediately?", opts: ["break", "stop", "exit", "cancel"], correct: 0 },
+      { q: "Which boolean represents 'no'?", opts: ["false", "null", "0", "undefined"], correct: 0 },
     ];
+
 
     //DOM elements
     const qEl = document.getElementById('question');
     const oEl = document.getElementById('options');
-    const pEl = document.getElementById('progress'); 
+    const pEl = document.getElementById('progress');
     const rBtn = document.getElementById('restartBtn');
-    const b5050   = document.getElementById('btn5050');
+    const b5050 = document.getElementById('btn5050');
 
     const bFriend = document.getElementById('btnFriend');
     const bAud = document.getElementById('btnAudience');
 
+
     //State
     let current = 0;
+
 
     //Render
     function renderQuestionText() {
@@ -105,26 +164,25 @@
       qEl.textContent = questions[current].q;
     }
 
+
     function renderOptions() {
       const item = questions[current];
       oEl.innerHTML = '';
-      ["A","B","C","D"].forEach((label, i) => {
+      ["A", "B", "C", "D"].forEach((label, i) => {
         const btn = document.createElement('button');
         btn.className = 'option';
         btn.innerHTML = `<strong>${label}</strong> ${item.opts[i]}`;
-        btn.onclick = () => handleAnswer(i, btn); 
+        btn.onclick = () => handleAnswer(i, btn);
         oEl.appendChild(btn);
       });
     }
 
-    
+
     function handleAnswer(i, btn) {
       const item = questions[current];
       const correctIndex = item.correct;
 
-
       [...oEl.children].forEach(b => b.disabled = true);
-
 
       if (i === correctIndex) {
         btn.classList.add('correct');
@@ -152,6 +210,7 @@
       }
     }
 
+
     function restart() {
       current = 0;
       // reset lifelines state
@@ -161,73 +220,110 @@
     }
     rBtn.onclick = restart;
 
+
     // 50-50 
     b5050.onclick = () => {
-      if (b5050.classList.contains('used')) return; 
+      // stop if already used
+      if (b5050.classList.contains('used')) {
+        return;
+      }
 
-      const correctIndex = questions[current].correct;
+      const correct = questions[current].correct;
       let removed = 0;
 
-  
-    [...oEl.children].forEach((btn, i) => {
-      if (i !== correctIndex && removed < 2) {
-        btn.style.visibility = 'hidden'; // btn.style.display = 'none'
-        removed++;
+      for (let i = 0; i < oEl.children.length; i++) {
+        if (i !== correct && removed < 2) {
+          oEl.children[i].style.visibility = "hidden"; // hide the button
+          removed++;
+        }
       }
-    });
 
-  b5050.classList.add('used');
-  alert('50:50 used — two wrong answers removed.');
+      alert("50:50 used — two wrong answers removed.");
+
+      b5050.classList.add('used');
     };
+
 
     //Audience
     bAud.onclick = () => {
-      if (bAud.classList.contains('used')) return;
-      const c = questions[current].correct;
-      const perc = [0,0,0,0];
-      let remaining = 100;
 
-      perc[c] = 40 + Math.floor(Math.random() * 21); // 40..60
-      remaining -= perc[c];
-
-      const others = [0,1,2,3].filter(i => i !== c);
-      for (let i = 0; i < others.length; i++) {
-        const isLast = i === others.length - 1;
-        const val = isLast ? remaining : Math.floor(Math.random() * (remaining + 1));
-        perc[others[i]] = val;
-        remaining -= val;
+      if (bAud.classList.contains('used')) {
+        return;
       }
 
-      alert(
-        `Audience vote:\n` +
-        perc.map((p,i) => `${['A','B','C','D'][i]}: ${p}%`).join('\n')
-      );
+      const correct = questions[current].correct;
+
+      let perc = [0, 0, 0, 0];
+      let remaining = 100;
+
+      perc[correct] = 40 + Math.floor(Math.random() * 21); // 40..60
+      remaining -= perc[correct];
+
+      const wrongAnswers = [0, 1, 2, 3].filter(i => i !== correct);
+
+      for (let i = 0; i < wrongAnswers.length; i++) {
+        const isLast = (i === wrongAnswers.length - 1);
+        let value;
+
+        if (isLast) {
+
+          value = remaining;
+        } else {
+  
+          value = Math.floor(Math.random() * (remaining + 1));
+          remaining -= value;
+        }
+
+        perc[wrongAnswers[i]] = value;
+      }
+
+      let message = "Audience vote:\n";
+      for (let i = 0; i < 4; i++) {
+        message += ["A", "B", "C", "D"][i] + ": " + perc[i] + "%\n";
+      }
+
+      alert(message);
+
       bAud.classList.add('used');
     };
 
+
     //Phone call
     bFriend.onclick = () => {
-      if (bFriend.classList.contains('used')) return;
-      const c = questions[current].correct;
-      const guess = Math.random() < 0.7 ? c : [0,1,2,3].filter(i => i !== c)[Math.floor(Math.random()*3)];
-      alert(`Your friend thinks it's option ${['A','B','C','D'][guess]}.`);
+
+      if (bFriend.classList.contains('used')) {
+        return;
+      }
+
+      const correct = questions[current].correct;
+
+      let guess;
+      const chance = Math.random();
+
+      if (chance < 0.7) {
+
+        guess = correct;
+
+      } else {
+
+        const wrongAnswers = [0, 1, 2, 3].filter(i => i !== correct);
+        const randomIndex = Math.floor(Math.random() * wrongAnswers.length);
+        guess = wrongAnswers[randomIndex];
+      }
+
+      alert("Your friend thinks it's option " + ["A", "B", "C", "D"][guess] + ".");
+
       bFriend.classList.add('used');
     };
 
-    /*function restart() {
-      current = 0;
-      [b5050, bFriend, bAud].forEach(b => b.classList.remove('used'));
-      renderQuestionText();
-      renderOptions();
-      }*/
-    rBtn.onclick = restart;
-   
+
     function start() {
       renderQuestionText();
       renderOptions();
     }
-
+    
     start();
   </script>
 </body>
+
 </html>
