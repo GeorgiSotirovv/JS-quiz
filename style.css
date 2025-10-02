@@ -1,0 +1,99 @@
+body {
+      margin: 0;
+      font-family: system-ui, Arial, sans-serif;
+      background: #101522;
+      color: #f5f7ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: #1a2240;
+      border: 1px solid #263057;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    #options {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid #34406a;
+      background: #121a34;
+      border-radius: 8px;
+      color: #f5f7ff;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .option.correct {
+      background: #14361f;
+      border-color: #1f6b34;
+    }
+
+    .option.wrong {
+      background: #3a1218;
+      border-color: #7a2630;
+    }
+
+    .option:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid #34406a;
+      border-radius: 999px;
+    }
+
+    .btn {
+      margin-top: 10px;
+      border: 1px solid #34406a;
+      background: #222b4a;
+      color: #f5f7ff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+
+      .btn.used {
+        opacity: .6;
+        pointer-events: none;
+      }
+
+
+      .lifelines {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .btn.used {
+        opacity: .6;
+        pointer-events: none;
+      }
+    }
