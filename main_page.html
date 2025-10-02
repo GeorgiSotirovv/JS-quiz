@@ -206,7 +206,13 @@
     };
 
     //Phone call
-    bFriend.onclick = () => {}
+    bFriend.onclick = () => {
+      if (bFriend.classList.contains('used')) return;
+      const c = questions[current].correct;
+      const guess = Math.random() < 0.7 ? c : [0,1,2,3].filter(i => i !== c)[Math.floor(Math.random()*3)];
+      alert(`Your friend thinks it's option ${['A','B','C','D'][guess]}.`);
+      bFriend.classList.add('used');
+    };
 
     /*function restart() {
       current = 0;
