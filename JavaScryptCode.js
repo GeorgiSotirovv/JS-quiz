@@ -6,59 +6,59 @@ if (!window.QUESTIONS || !Array.isArray(window.QUESTIONS)) {
 const questions = window.QUESTIONS || [];
 
 //DOM elements
-const qEl = document.getElementById('question');    // container for the question text
-const oEl = document.getElementById('options');     // container for the answer buttons
-const pEl = document.getElementById('progress');    // shows the quiz progress
-const rBtn = document.getElementById('restartBtn'); // "New Game" button
-const b5050 = document.getElementById('btn5050');   // 50:50 lifeline button
-const bFriend = document.getElementById('btnFriend'); // Phone a Friend lifeline button
-const bAud = document.getElementById('btnAudience');  // Ask the Audience lifeline button
+const questionBox = document.getElementById('question');    // container for the question text
+const optionsBox = document.getElementById('options');     // container for the answer buttons
+const progressBox = document.getElementById('progress');    // shows the quiz progress
+const restartBtn = document.getElementById('restartBtn'); // "New Game" button
+const btn5050 = document.getElementById('btn5050');   // 50:50 lifeline button
+const btnFriend = document.getElementById('btnFriend'); // Phone a Friend lifeline button
+const btnAudience = document.getElementById('btnAudience');  // Ask the Audience lifeline button
 
 
 //State of the game 
-let current = 0;
+let CurrentState = 0;
 
 
 //Render logic. Show us the 4 answer options as buttons (A–D)
 function renderQuestionText() {
-    pEl.textContent = `Question ${current + 1}/${questions.length}`;
-    qEl.textContent = questions[current].q;
+    progressBox.textContent = `Question ${CurrentState + 1}/${questions.length}`;
+    questionBox.textContent = questions[CurrentState].q; 
 }
 
 //Show us the 4 answer options as buttons (A–D)
 function renderOptions() {
-    const item = questions[current]; // get current question
-    oEl.innerHTML = ''; // clear old options
+    const item = questions[CurrentState]; // get current question
+    optionsBox.innerHTML = ''; // clear old options
 
     ["A", "B", "C", "D"].forEach((label, i) => {
         const btn = document.createElement('button'); // create a button
         btn.className = 'option'; // add style class
         btn.innerHTML = `<strong>${label}</strong> ${item.opts[i]}`; // set label + text
         btn.onclick = () => handleAnswer(i, btn); // check answer when clicked
-        oEl.appendChild(btn); // add button to page
+        optionsBox.appendChild(btn); // add button to page
     });
 }
 
 // Answers logic
 function handleAnswer(i, btn) {
-    const item = questions[current];        // get the current question
+    const item = questions[CurrentState];        // get the current question
     const correctIndex = item.correct;      // find the correct answer index
 
     // disable all option buttons after one is clicked
-    [...oEl.children].forEach(b => b.disabled = true);
+    [...optionsBox.children].forEach(b => b.disabled = true);
 
     //If the selected answer is correct
     if (i === correctIndex) {
         btn.classList.add('correct'); // mark selected button as correct (green)
 
         setTimeout(() => {
-            current++; // move to next question
-            if (current < questions.length) {
+            CurrentState++; // move to next question
+            if (CurrentState < questions.length) {
                 renderQuestionText(); // show new question
                 renderOptions();      // show new options
             } else {
                 alert('Congrats! You finished all questions 🎉'); // end message
-                current = 0; // reset game
+                CurrentState = 0; // reset game
                 renderQuestionText();
                 renderOptions();
             }
@@ -67,11 +67,11 @@ function handleAnswer(i, btn) {
         //If the selected answer is wrong
     } else {
         btn.classList.add('wrong'); // mark selected button as wrong (red)
-        oEl.children[correctIndex].classList.add('correct'); // show correct answer
+        optionsBox.children[correctIndex].classList.add('correct'); // show correct answer
 
         setTimeout(() => {
             alert('Wrong answer. Starting a new game.'); // message
-            current = 0; // reset game
+            CurrentState = 0; // reset game
             renderQuestionText();
             renderOptions();
         }, 800);
@@ -80,47 +80,47 @@ function handleAnswer(i, btn) {
 
 // logic for "new game" button
 function restart() {
-    current = 0;
-    [b5050, bFriend, bAud].forEach(b => b.classList.remove('used'));
+    CurrentState = 0;
+    [btn5050, btnFriend, btnAudience].forEach(b => b.classList.remove('used'));
     renderQuestionText();
     renderOptions();
 }
-rBtn.onclick = restart;
+restartBtn.onclick = restart;
 
 
 //50:50 lifeline logic
-b5050.onclick = () => {
+btn5050.onclick = () => {
 
     // stop if already used
-    if (b5050.classList.contains('used')) {
+    if (btn5050.classList.contains('used')) {
         return;
     }
 
-    const correct = questions[current].correct; // correct answer index
+    const correct = questions[CurrentState].correct; // correct answer index
     let removed = 0; // how many wrong answers removed
 
     // loop through all options and hide 2 wrong ones
-    for (let i = 0; i < oEl.children.length; i++) {
+    for (let i = 0; i < optionsBox.children.length; i++) {
         if (i !== correct && removed < 2) {
-            oEl.children[i].style.visibility = "hidden"; // hide wrong option
+            optionsBox.children[i].style.visibility = "hidden"; // hide wrong option
             removed++;
         }
     }
 
     alert("50:50 used — two wrong answers removed."); // show message
-    b5050.classList.add('used'); // mark this joker as used
+    btn5050.classList.add('used'); // mark this joker as used
 };
 
 
 //Audience lifeline logic
-bAud.onclick = () => {
+btnAudience.onclick = () => {
 
     // stop if already used
-    if (bAud.classList.contains('used')) {
+    if (btnAudience.classList.contains('used')) {
         return;
     }
 
-    const correct = questions[current].correct; // correct answer index
+    const correct = questions[CurrentState].correct; // correct answer index
     let perc = [0, 0, 0, 0]; // store percentages
     let remaining = 100; // total percent left
 
@@ -152,19 +152,19 @@ bAud.onclick = () => {
     }
 
     alert(message); // show audience vote
-    bAud.classList.add('used'); // mark joker as used
+    btnAudience.classList.add('used'); // mark joker as used
 };
 
 
 //Phone a Friend lifeline logic
-bFriend.onclick = () => {
+btnFriend.onclick = () => {
 
     // stop if already used
-    if (bFriend.classList.contains('used')) {
+    if (btnFriend.classList.contains('used')) {
         return;
     }
 
-    const correct = questions[current].correct; // correct answer index
+    const correct = questions[CurrentState].correct; // correct answer index
     let guess;
     const chance = Math.random(); // random number 0–1
 
@@ -179,7 +179,7 @@ bFriend.onclick = () => {
     }
 
     alert("Your friend thinks it's option " + ["A", "B", "C", "D"][guess] + "."); // show friend's answer
-    bFriend.classList.add('used'); // mark joker as used
+    btnFriend.classList.add('used'); // mark joker as used
 };
 
 
